@@ -1,13 +1,19 @@
+import java.io.IOException;
 
 public class Movement extends Main{
 
-	public ExtraFeatures features = new ExtraFeatures();
-
+	public ExtraFeatures features = new ExtraFeatures(); //initializing object name
+	
 	public void Forward()
 	{
+		int left = myfi.getRightLightSensor()-20;
+		int right = myfi.getLeftLightSensor()-20;
+		
 		//if both left and right current light sensor reading is more than atmosphere on both left and right sensor, finch moves forward
 		System.out.println("Moving Forward");
-		myfi.setWheelVelocities(myfi.getRightLightSensor()-20,myfi.getLeftLightSensor()-20);
+		myfi.setWheelVelocities(left,right);
+		System.out.println("Speed: (L) "+left+" (R) "+right+"\n");
+		//ExtraFeatures.bw.write("Speed: (L) "+left+" (R) "+right+"\n");
 
 		//calling sound method
 		features.Sound();
@@ -18,10 +24,14 @@ public class Movement extends Main{
 
 	public void Left()
 	{
+		int left = myfi.getRightLightSensor()-30;
+		int right = myfi.getLeftLightSensor()-5;
+		
 		//if the current left sensor is more than the initial left atmosphere sensor reading, finch turns left
 		System.out.println("Turning Left");
-		myfi.setWheelVelocities(myfi.getRightLightSensor()-50,myfi.getLeftLightSensor()-10);
-
+		myfi.setWheelVelocities(left,right);
+		System.out.println("Speed: (L) "+left+" (R) "+right+"\n");
+		
 		//calling sound method
 		features.Sound();
 
@@ -31,9 +41,14 @@ public class Movement extends Main{
 
 	public void Right()
 	{
+		int left = myfi.getRightLightSensor()-5;
+		int right = myfi.getLeftLightSensor()-30;
+		
 		//if the current right sensor is more than the initial right atmosphere sensor reading, finch turns right
 		System.out.println("Turning Right");
-		myfi.setWheelVelocities(myfi.getRightLightSensor()-10,myfi.getLeftLightSensor()-50);
+		myfi.setWheelVelocities(left,right);
+		System.out.println("Speed: (L) "+left+" (R) "+right+"\n");
+		
 
 		//calling sound method
 		features.Sound();
@@ -42,7 +57,7 @@ public class Movement extends Main{
 		features.BlueLED();
 	}
 
-	public void Obstacle()
+	public void Obstacle() throws IOException
 	{
 		//checks if there is an obstacle infront
 		System.out.println("\n<OBSTACLE DETECTED>");	
@@ -55,14 +70,14 @@ public class Movement extends Main{
 		features.CountdownObstacle();
 	}
 
-	public void NoLight()
+	public void NoLight() throws IOException
 	{
 		//otherwise, if there both current sensor is less than the initial atmosphere sensor reading, finch will stop moving
 		System.out.println("\n<NO LIGHT DETECTED>");
 		myfi.stopWheels();
 
 		//calling led method
-		features.YellowLED();
+		features.RedLED();
 
 		//calling timer method
 		features.CountdownLight();
