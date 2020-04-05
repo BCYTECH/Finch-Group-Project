@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import edu.cmu.ri.createlab.terk.robot.finch.Finch;
-import java.util.Scanner;
 import java.io.*;
 import java.time.*;
 
@@ -49,12 +48,7 @@ public class Main
 		//initializing object and obstacle array
 		Movement go = new Movement();
 
-		if(myfi.isObstacleLeftSide()==true || myfi.isObstacleRightSide()==true) //check if there is an obstacle (0 is left, 1 is right)
-		{
-			countstop++;
-			go.Obstacle();
-		}
-		else
+		if(myfi.isObstacleLeftSide()==false || myfi.isObstacleRightSide()==false) //if there is no obstacle, check for light
 		{
 			while(true) 	
 			{
@@ -62,31 +56,37 @@ public class Main
 				{
 					//if both current left and right light sensor reading is more than atmosphere on both left and right sensor, finch moves forward
 					countforward++;
-					go.Forward();
 					sequence.add("Forward");
+					go.Forward();
 				}
 				else if (myfi.getRightLightSensor() > right_light)
 				{
 					//if the current right sensor is more than the initial right atmosphere sensor reading, finch turns right
 					countright++;
-					go.Right();
 					sequence.add("Right");
+					go.Right();
 				}
 				else if (myfi.getLeftLightSensor()> left_light)
 				{
 					//if the current left sensor is more than the initial left atmosphere sensor reading, finch turns left
 					countleft++;
-					go.Left();
 					sequence.add("Left");
+					go.Left();
 				}
 				else if (myfi.getLeftLightSensor() < left_light && myfi.getRightLightSensor() < right_light)
 				{
 					// if the current left and right light value is lesser than the initial reading value, finch stops moving
 					countstop++;
-					go.NoLight();
 					sequence.add("Stop");
+					go.NoLight();
 				}
 			}
+		}
+		else //otherwise if there is an obstacle, stop the finch
+		{
+			countstop++;
+			sequence.add("Stop");
+			go.Obstacle();
 		}
 	}
 	
